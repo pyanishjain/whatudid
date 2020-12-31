@@ -3,14 +3,16 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+
 class Customer(models.Model):
-    user = models.OneToOneField(User, null=True, blank=True,on_delete=models.CASCADE)
-    name = models.CharField(max_length=20,null=True)
-    email = models.EmailField(max_length=254,null=True)
-    
+    user = models.OneToOneField(
+        User, null=True, blank=True, on_delete=models.CASCADE)
+    name = models.CharField(max_length=20, null=True)
+    email = models.EmailField(max_length=254, null=True)
+
     def __str__(self):
         return self.name
-    
+
 
 class Product(models.Model):
     name = models.CharField(max_length=50)
@@ -20,7 +22,7 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-    
+
     @property
     def imageURL(self):
         try:
@@ -28,17 +30,19 @@ class Product(models.Model):
         except:
             url = ''
         return url
-    
+
     @property
     def getquantity(self):
         quantity = self.quantity
         return quantity
 
+
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, null=True, blank=True, on_delete=models.SET_NULL)
+    customer = models.ForeignKey(
+        Customer, null=True, blank=True, on_delete=models.SET_NULL)
     date_ordered = models.DateTimeField(auto_now_add=True)
     complete = models.BooleanField(default=False, null=True, blank=False)
-    transaction_id = models.CharField(max_length=80,null=True)
+    transaction_id = models.CharField(max_length=80, null=True)
 
     def __str__(self):
         return str(self.id)
@@ -53,12 +57,13 @@ class Order(models.Model):
         orderitems = self.orderitem_set.all()
         total = sum([item.get_total for item in orderitems])
         return total
-    
+
     @property
     def get_cart_items(self):
         orderitems = self.orderitem_set.all()
         total = sum([item.quantity for item in orderitems])
         return total
+
 
 class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
@@ -68,15 +73,16 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return str(self.id)
-    
+
     @property
     def get_total(self):
         total = self.product.price * self.quantity
         return total
-    
+
 
 class ShippingAddress(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, null=True)
+    customer = models.ForeignKey(
+        Customer, on_delete=models.SET_NULL, null=True)
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
     address = models.CharField(max_length=200, null=False)
     city = models.CharField(max_length=30, null=False)
@@ -87,4 +93,12 @@ class ShippingAddress(models.Model):
 
     def __str__(self):
         return str(self.id)
-  
+
+
+class Blog(models.Model):
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    points = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return str(self.created.date())
