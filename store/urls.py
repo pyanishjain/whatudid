@@ -13,5 +13,6 @@ urlpatterns = [
     path('process_order/', views.processOrder, name="process_order"),
     path('search/', views.search, name="search"),
 
-    path('', views.blog, name="blog")
+    path('', views.blog, name="blog"),
+    path('comment/<int:id>', views.comment, name="comment"),
 ]

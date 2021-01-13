@@ -23,9 +23,10 @@
     <div class="alert alert-danger">{{error|escape}}</div>
     {% endfor %} {% endif %}
 
+    <div class="container" style="margin-top: 10px;">
+        <p>{{blog.body}}</p>
+        <hr>
 
-    <h3 class="text-center">A platform where you share by being anonymous</h3>
-    <div class="container">
         <form method="POST">
             {% csrf_token %}
             {% for field in forms %}
@@ -33,19 +34,20 @@
             {{field}}
             {% endfor %}
             <br>
-            <button class="btn btn-primary btn-lg">Post</button>
+            <button class="btn btn-primary btn-lg">Comment
+                
+            </button>
         </form>
     </div>
-
-
-    <div class="container">
-        <hr>
-        {% for blog in blogs %}
-        {{blog.body}} | {{blog.created}} | <a href="{% url 'comment' id=blog.id %}">Comment[{{blog.totalComments}}]</a>
-        <hr>
+    <hr>
+    <div style="margin-left: 100px;">
+        {% if comments %}
+        {% for comment in comments %}
+        <p>{{comment.reply}}</p>
         {% endfor %}
-
+        {% endif %}
     </div>
+
 
 </body>
 

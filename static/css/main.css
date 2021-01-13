@@ -168,11 +168,16 @@ body {
   font-weight: 400;
   color: #777777;
   background: #fff;
+  margin: 20px;
 }
 
 html,
 body {
   height: 100%;
+  font-family: monospace;
+  font-size: 1.1rem;
+  color: black;
+  font-weight: 800;
 }
 
 ul {

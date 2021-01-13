@@ -173,12 +173,32 @@ def search(request):
 
 def blog(request):
     blogs = Blog.objects.all().order_by('-created')
-    context = {'forms': BlogForm, 'blogs': blogs}
+    comments = Comment.objects.all()
+    context = {'forms': BlogForm, 'blogs': blogs, 'comments': comments}
     if request.method == 'POST':
         form = BlogForm(request.POST)
         if form.is_valid():
             form.save()
         else:
-            context = {'forms': form, 'blogs': blogs}
+            context = {'forms': form, 'blogs': blogs, 'comments': comments}
             return render(request, 'blog.html', context)
     return render(request, 'blog.html', context)
+
+
+def comment(request, id):
+    blog = Blog.objects.get(pk=id)
+    comments = Comment.objects.filter(blog=id)
+    context = {'forms': CommentForm, 'blog': blog, 'comments': comments}
+    if request.method == 'POST':
+        forms = CommentForm(request.POST)
+        if forms.is_valid():
+            comment = forms.save(commit=False)
+            comment.blog = blog
+            comment.save()
+            blog.totalComments += 1
+            blog.save()
+            return redirect('blog')
+        else:
+            context = {'forms': forms, 'blog': blog, 'comments': comments}
+            return render(request, 'comment.html', context)
+    return render(request, 'comment.html', context)

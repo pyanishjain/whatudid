@@ -100,5 +100,16 @@ class Blog(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     points = models.IntegerField(blank=True, null=True)
 
+    totalComments = models.IntegerField(blank=True, null=True, default=0)
+
     def __str__(self):
         return str(self.created.date())
+
+
+class Comment(models.Model):
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, null=True)
+    reply = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.reply
